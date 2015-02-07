@@ -21,11 +21,10 @@ def filter_tweet(tweet):
     return tweet.text
 
 def grab_tweets(api, user):
-    source_tweets=[]
+    result_tweets=[]
     user_tweets = api.GetUserTimeline(screen_name=user, count=200, max_id=None, include_rts=True, trim_user=True, exclude_replies=True)
-    max_id = user_tweets[len(user_tweets)-1].id-1
     for tweet in user_tweets:
         tweet.text = filter_tweet(tweet)
         if len(tweet.text) != 0:
-            source_tweets.append(tweet.text)
-    return source_tweets, max_id
+            result_tweets.append(tweet.text)
+    return result_tweets
