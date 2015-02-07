@@ -25,6 +25,12 @@ while True:
 	if src_sentence == current_sentence:
 		continue
 
-	print "start:", src_sentence
-	print "end:", current_sentence
+	print "--------------------------------------"
+	print src_sentence
+	print "--------------------------------------"
+	print current_sentence
+	print "--------------------------------------"
+
+	if Debug == False:
+		# post to twitter
 	break
