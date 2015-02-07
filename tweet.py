@@ -30,7 +30,4 @@ while True:
 	print "--------------------------------------"
 	print current_sentence
 	print "--------------------------------------"
-
-	if Debug == False:
-		# post to twitter
 	break
