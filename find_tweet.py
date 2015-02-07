@@ -1,11 +1,36 @@
 import re
 import twitter
+import random
+import os
+from htmlentitydefs import name2codepoint as n2c
+
+twitter_users = open('twitter_users.txt', 'r').read().splitlines()
 
 def connect():
-    api = twitter.Api(consumer_key=MY_CONSUMER_KEY,
-                      consumer_secret=MY_CONSUMER_SECRET,
-                      access_token_key=MY_ACCESS_TOKEN_KEY,
-                      access_token_secret=MY_ACCESS_TOKEN_SECRET)
+    api = twitter.Api(consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
+                          consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
+                          access_token_key=os.environ['TWITTER_ACCESS_TOKEN_KEY'],
+                          access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+    return api
+
+# https://github.com/tommeagher/heroku_ebooks/blob/master/ebooks.py
+def entity(text):
+    if text[:2] == "&#":
+        try:
+            if text[:3] == "&#x":
+                return unichr(int(text[3:-1], 16))
+            else:
+                return unichr(int(text[2:-1]))
+        except ValueError:
+            pass
+    else:
+        guess = text[1:-1]
+        numero = n2c[guess]
+        try:
+            text = unichr(numero)
+        except KeyError:
+            pass    
+    return text
 
 # https://github.com/tommeagher/heroku_ebooks/blob/master/ebooks.py
 def filter_tweet(tweet):
@@ -28,3 +53,9 @@ def grab_tweets(api, user):
         if len(tweet.text) != 0:
             result_tweets.append(tweet.text)
     return result_tweets
+
+def get_tweet():
+	api = connect()
+	user = random.choice(twitter_users)
+	tweets = grab_tweets(api, user)
+	return random.choice(tweets)

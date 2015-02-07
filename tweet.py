@@ -1,22 +1,30 @@
 import goslate
 import random
 from settings import *
+from find_tweet import get_tweet
 
 gs = goslate.Goslate()
 
-source_sentence = "Someone tell my brother to get a less testicular travel pillow"
-current_sentence = source_sentence
+while True:
+	src_sentence = get_tweet()
+	current_sentence = src_sentence
 
-num_translations = random.randint(MIN_TRANSLATIONS, MAX_TRANSLATIONS)
+	num_translations = random.randint(MIN_TRANSLATIONS, MAX_TRANSLATIONS)
 
-languages = open("languages.txt", "r").read().splitlines()
+	languages = open("languages.txt", "r").read().splitlines()
 
-for i in range(num_translations):
+	for i in range(num_translations):
 
-	src_language = 'en'
-	dst_language = random.choice(languages)
+		src_language = 'en'
+		dst_language = random.choice(languages)
 
-	current_sentence = gs.translate(current_sentence, dst_language)
-	current_sentence = gs.translate(current_sentence, src_language)
+		current_sentence = gs.translate(current_sentence, dst_language)
+		current_sentence = gs.translate(current_sentence, src_language)
 
-	print current_sentence
+	# if nothing changed, try again
+	if src_sentence == current_sentence:
+		continue
+
+	print "start:", src_sentence
+	print "end:", current_sentence
+	break
