@@ -1,25 +1,31 @@
 import goslate
 import random
+import sys
 from settings import *
-from find_tweet import get_tweet
+from find_tweet import get_tweet, connect
 
+api = connect()
 gs = goslate.Goslate()
 
 while True:
-	src_sentence = get_tweet()
+
+	# get a random tweet
+	src_sentence = get_tweet(api)
 	current_sentence = src_sentence
 
-	num_translations = random.randint(MIN_TRANSLATIONS, MAX_TRANSLATIONS)
+	# start out in english
+	src_language = 'en'
 
+	# get a list of supported languages to translate between
 	languages = open("languages.txt", "r").read().splitlines()
 
-	for i in range(num_translations):
-
-		src_language = 'en'
+	# translate to a bunch of different languages
+	for i in range(NUM_TRANSLATIONS):
 		dst_language = random.choice(languages)
-
 		current_sentence = gs.translate(current_sentence, dst_language)
-		current_sentence = gs.translate(current_sentence, src_language)
+
+	# translate back to source language
+	current_sentence = gs.translate(current_sentence, src_language)
 
 	# if nothing changed, try again
 	if src_sentence == current_sentence:
@@ -30,4 +36,8 @@ while True:
 	print "--------------------------------------"
 	print current_sentence
 	print "--------------------------------------"
-	break
+
+	if DEBUG == False:
+		api.PostUpdate(current_sentence)
+
+	sys.exit()

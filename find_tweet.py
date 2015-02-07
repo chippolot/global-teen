@@ -54,8 +54,7 @@ def grab_tweets(api, user):
             result_tweets.append(tweet.text)
     return result_tweets
 
-def get_tweet():
-	api = connect()
+def get_tweet(api):
 	user = random.choice(twitter_users)
 	tweets = grab_tweets(api, user)
 	return random.choice(tweets)
