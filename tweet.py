@@ -4,40 +4,46 @@ import sys
 from settings import *
 from find_tweet import get_tweet, connect
 
-api = connect()
-gs = goslate.Goslate()
+if __name__ == "__main__":
 
-while True:
+	if random.random() > CHANCE:
+		print "not tweeting this time"
+		sys.exit()
 
-	# get a random tweet
-	src_sentence = get_tweet(api)
-	current_sentence = src_sentence
+	api = connect()
+	gs = goslate.Goslate()
 
-	# start out in english
-	src_language = 'en'
+	while True:
 
-	# get a list of supported languages to translate between
-	languages = open("languages.txt", "r").read().splitlines()
+		# get a random tweet
+		src_sentence = get_tweet(api)
+		current_sentence = src_sentence
 
-	# translate to a bunch of different languages
-	for i in range(NUM_TRANSLATIONS):
-		dst_language = random.choice(languages)
-		current_sentence = gs.translate(current_sentence, dst_language)
+		# start out in english
+		src_language = 'en'
 
-	# translate back to source language
-	current_sentence = gs.translate(current_sentence, src_language)
+		# get a list of supported languages to translate between
+		languages = open("languages.txt", "r").read().splitlines()
 
-	# if nothing changed, try again
-	if src_sentence == current_sentence:
-		continue
+		# translate to a bunch of different languages
+		for i in range(NUM_TRANSLATIONS):
+			dst_language = random.choice(languages)
+			current_sentence = gs.translate(current_sentence, dst_language)
 
-	print "--------------------------------------"
-	print src_sentence
-	print "--------------------------------------"
-	print current_sentence
-	print "--------------------------------------"
+		# translate back to source language
+		current_sentence = gs.translate(current_sentence, src_language)
 
-	if DEBUG == False:
-		api.PostUpdate(current_sentence)
+		# if nothing changed, try again
+		if src_sentence == current_sentence:
+			continue
 
-	sys.exit()
+		print "--------------------------------------"
+		print src_sentence
+		print "--------------------------------------"
+		print current_sentence
+		print "--------------------------------------"
+
+		if DEBUG == False:
+			api.PostUpdate(current_sentence)
+
+		sys.exit()
