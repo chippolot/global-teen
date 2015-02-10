@@ -5,4 +5,4 @@ sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 NUM_TRANSLATIONS=3
 DEBUG=False
-CHANCE = 0.2
+CHANCE = 0.25
